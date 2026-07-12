@@ -1,72 +1,60 @@
-echo "=================================="
-echo "LINUX SECURITY BASELINE REPORT"
-echo "=================================="
+#!/bin/bash
 
-#what is the hostname?
-echo
-echo "[HOSTNAME]"
-hostname
+collect_data()
+{
+    thehostname=$(hostname)
+    osversion=$(cat /etc/os-release | grep -E "^(NAME|VERSION)=")
+    kernelversion=$(uname -r)
+    currentuser=$(whoami)
+    usersuidcount=$(awk -F: '$3 == 0 {print $1}' /etc/passwd | wc -l)
+    #sudo users
+    countsudousers=$(getent group sudo | cut -d: -f4 | wc -l)
+    sudousers=$(getent group sudo | cut -d: -f4)
+    openports=$(ss -tulpn | grep LISTEN)
+    unnecessaryservices=$(systemctl list-units --type=service --state=running 2>/dev/null | grep -E "telnet|ftp|vsftpd|rsh" | wc -l)
+    #firewall status
+    sudo ufw status 2>/dev/null | grep -q "Status: active"
+    firewallstat=$?
+    #permition root login
+    grep -qi "^PermitRootLogin yes" /etc/ssh/sshd_config 2>/dev/null
+    sshrootlogin=$?
+    #ssh password auth
+    grep -qi "^PasswordAuthentication yes" /etc/ssh/sshd_config 2>/dev/null
+    sshpswdauth=$?
+    insecurecronjobs=$(find /etc/cron* -type f -perm -0002 2>/dev/null | wc -l)
+    worldwritablefile=$(find / -xdev -type f -perm -0002 2>/dev/null | head -n 1 | wc -l)
+    suidfiles=$(find / -perm -4000 -type f 2>/dev/null | wc -l)
+}
 
-#which distro is used?
-echo
-echo "[OS VERSION]"
-cat /etc/os-release
+print_baseline()
+{
+    echo "=================================="
+    echo "LINUX SECURITY BASELINE REPORT"
+    echo -e "==================================\n\n"
 
-#linux kernel version
-echo
-echo "[KERNEL]"
-uname -r
+    # ==================================
+    # SECTION 1: SYSTEM INFORMATION
+    # ==================================
 
-echo
-echo "[CURRENT USER]"
-whoami
+    echo -e "[HOSTNAME]:\n$thehostname\n"
+    echo -e "[OS VERSION]:\n$osversion\n"
+    echo -e "[KERNEL]:\n$kernelversion\n"
+    echo -e "[CURRENT USER]:\n$currentuser\n"
+    echo -e "[NUMBER OF USERS WITH UID 0]:\n$usersuidcount\n"
+    echo -e "[NUMBER OF SUDO USERS]:\n$countsudousers"
+    echo -e "$sudousers\n"
+    echo -e "[OPEN PORTS]:\n$openports\n"
+    echo -e "[UNNECESSARY SERVICES (Telnet, FTP, VSFTPD, or RSH)]:\n$unnecessaryservices\n"
+    printf "[FIREWALL STATUS]:\n%s\n\n" \
+        "$([[ $firewallstat -eq 0 ]] && echo "Firewall Active" || echo "Firewall Inactive")"
+    printf "[PERMIT ROOT LOGIN]:\n%s\n\n" \
+        "$([[ $sshrootlogin -eq 0 ]] && echo "SSH Root Login Enabled" || echo "SSH Root Login Disabled")"
+    printf "[SSH PASSWORD AUTH]:\n%s\n\n" \
+        "$([[ $sshpswdauth -eq 0 ]] && echo "Password Authentication Enabled" || echo "Password Authentication Disabled")"
+    echo -e "[INSECURE CRON JOBS]:\n$insecurecronjobs\n"
+    echo -e "[WORLD-WRITABLE FILES]:\n$worldwritablefile\n"
+    echo -e "[SUID FILES]:\n$suidfiles\n"
+}
 
-#identify users with UID 0
-echo
-echo "[USERS WITH UID 0]"
-awk -F: '$3 == 0 {print $1}' /etc/passwd
-
-#administrator privilege user list (in sudo group)
-echo
-echo "[SUDO USERS]"
-getent group sudo
-
-#which port is open for the application on this server (ss = socket statistics)
-echo
-echo "[OPEN PORTS]"
-ss -tulpn
-
-#services/daemon that running in the background
-echo
-echo "[RUNNING SERVICES]"
-systemctl list-units --type=service --state=running
-
-#maintain the firewall iptables with ufw (uncomplicated firewall)
-echo
-echo "[FIREWALL STATUS]"
-sudo ufw status 2>/dev/null
-
-#check SSH daemon configuration with Extended regexp feature
-#permitrootlogin = configure the ssh login as administrator
-#passwordauthentication = configure the ssh login using password (for more secure, using ssh key)
-echo
-echo "[SSH CONFIG]"
-grep -E "PermitRootLogin|PasswordAuthentication" /etc/ssh/sshd_config 2>/dev/null
-
-
-#system-wide automation job list
-echo
-echo "[CRON JOBS]"
-ls -lah /etc/cron.*
-
-#a world-writable filesystem that has write access for the 'others' group.
-echo
-echo "[WORD WRITABLE FILES]"
-find / -xdev -type f -perm -0002 2>/dev/null | head
-
-#Display all SUID-enabled files. 
-#(SUID = Set User ID)
-echo
-echo "[SUID FILES]"
-find / -perm -4000 -type f 2>/dev/null | head -20
-
+collect_data
+print_baseline
