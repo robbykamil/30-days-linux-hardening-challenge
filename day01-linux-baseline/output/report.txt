@@ -2,43 +2,28 @@
 LINUX SECURITY BASELINE REPORT
 ==================================
 
-[HOSTNAME]
+
+[HOSTNAME]:
 vc-devops
 
-[OS VERSION]
-PRETTY_NAME="Ubuntu 24.04.4 LTS"
+[OS VERSION]:
 NAME="Ubuntu"
-VERSION_ID="24.04"
 VERSION="24.04.4 LTS (Noble Numbat)"
-VERSION_CODENAME=noble
-ID=ubuntu
-ID_LIKE=debian
-HOME_URL="https://www.ubuntu.com/"
-SUPPORT_URL="https://help.ubuntu.com/"
-BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
-PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
-UBUNTU_CODENAME=noble
-LOGO=ubuntu-logo
 
-[KERNEL]
+[KERNEL]:
 6.17.0-1011-oracle
 
-[CURRENT USER]
+[CURRENT USER]:
 ubuntu
 
-[USERS WITH UID 0]
-root
+[NUMBER OF USERS WITH UID 0]:
+1
 
-[SUDO USERS]
-sudo:x:27:ubuntu
+[NUMBER OF SUDO USERS]:
+1
+ubuntu
 
-[OPEN PORTS]
-Netid State  Recv-Q Send-Q     Local Address:Port Peer Address:PortProcess
-udp   UNCONN 0      0             127.0.0.54:53        0.0.0.0:*          
-udp   UNCONN 0      0          127.0.0.53%lo:53        0.0.0.0:*          
-udp   UNCONN 0      0      10.0.0.236%enp0s5:68        0.0.0.0:*          
-udp   UNCONN 0      0                0.0.0.0:111       0.0.0.0:*          
-udp   UNCONN 0      0                   [::]:111          [::]:*          
+[OPEN PORTS]:
 tcp   LISTEN 0      4096          127.0.0.54:53        0.0.0.0:*          
 tcp   LISTEN 0      4096       127.0.0.53%lo:53        0.0.0.0:*          
 tcp   LISTEN 0      4096             0.0.0.0:22        0.0.0.0:*          
@@ -46,117 +31,24 @@ tcp   LISTEN 0      4096             0.0.0.0:111       0.0.0.0:*
 tcp   LISTEN 0      4096                [::]:22           [::]:*          
 tcp   LISTEN 0      4096                [::]:111          [::]:*          
 
-[RUNNING SERVICES]
-  UNIT                                                       LOAD   ACTIVE SUB     DESCRIPTION
-  containerd.service                                         loaded active running containerd container runtime
-  cron.service                                               loaded active running Regular background program processing daemon
-  dbus.service                                               loaded active running D-Bus System Message Bus
-  docker.service                                             loaded active running Docker Application Container Engine
-  getty@tty1.service                                         loaded active running Getty on tty1
-  iscsid.service                                             loaded active running iSCSI initiator daemon (iscsid)
-  ModemManager.service                                       loaded active running Modem Manager
-  multipathd.service                                         loaded active running Device-Mapper Multipath Device Controller
-  polkit.service                                             loaded active running Authorization Manager
-  rpcbind.service                                            loaded active running RPC bind portmap service
-  rsyslog.service                                            loaded active running System Logging Service
-  serial-getty@ttyS0.service                                 loaded active running Serial Getty on ttyS0
-  snap.oracle-cloud-agent.oracle-cloud-agent-updater.service loaded active running Service for snap application oracle-cloud-agent.oracle-cloud-agent-updater
-  snap.oracle-cloud-agent.oracle-cloud-agent.service         loaded active running Service for snap application oracle-cloud-agent.oracle-cloud-agent
-  snapd.service                                              loaded active running Snap Daemon
-  ssh.service                                                loaded active running OpenBSD Secure Shell server
-  systemd-journald.service                                   loaded active running Journal Service
-  systemd-logind.service                                     loaded active running User Login Management
-  systemd-networkd.service                                   loaded active running Network Configuration
-  systemd-resolved.service                                   loaded active running Network Name Resolution
-  systemd-timesyncd.service                                  loaded active running Network Time Synchronization
-  systemd-udevd.service                                      loaded active running Rule-based Manager for Device Events and Files
-  udisks2.service                                            loaded active running Disk Manager
-  unattended-upgrades.service                                loaded active running Unattended Upgrades Shutdown
-  unified-monitoring-agent.service                           loaded active running unified-monitoring-agent: Fluentd based data collector for Oracle Cloud Infrastructure
-  user@1001.service                                          loaded active running User Manager for UID 1001
+[UNNECESSARY SERVICES (Telnet, FTP, VSFTPD, or RSH)]:
+0
 
-Legend: LOAD   → Reflects whether the unit definition was properly loaded.
-        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
-        SUB    → The low-level unit activation state, values depend on unit type.
+[FIREWALL STATUS]:
+Firewall Inactive
 
-26 loaded units listed.
+[PERMIT ROOT LOGIN]:
+SSH Root Login Disabled
 
-[FIREWALL STATUS]
-Status: inactive
+[SSH PASSWORD AUTH]:
+Password Authentication Disabled
 
-[SSH CONFIG]
-#PermitRootLogin prohibit-password
-#PasswordAuthentication yes
-# PasswordAuthentication.  Depending on your PAM configuration,
-# the setting of "PermitRootLogin prohibit-password".
-# PAM authentication, then enable this but set PasswordAuthentication
+[INSECURE CRON JOBS]:
+0
 
-[CRON JOBS]
-/etc/cron.d:
-total 28K
-drwxr-xr-x   2 root root 4.0K May  5 06:57 .
-drwxr-xr-x 115 root root  12K Jun 30 08:54 ..
--rw-r--r--   1 root root  102 Mar 31  2024 .placeholder
--rw-r--r--   1 root root  201 Apr  8  2024 e2scrub_all
--rw-r--r--   1 root root  396 Jan  9  2024 sysstat
+[WORLD-WRITABLE FILES]:
+0
 
-/etc/cron.daily:
-total 44K
-drwxr-xr-x   2 root root 4.0K May 25 14:16 .
-drwxr-xr-x 115 root root  12K Jun 30 08:54 ..
--rw-r--r--   1 root root  102 Mar 31  2024 .placeholder
--rwxr-xr-x   1 root root  376 Jul  8  2025 apport
--rwxr-xr-x   1 root root 1.5K Mar 22  2024 apt-compat
--rwxr-xr-x   1 root root  123 Feb  5  2024 dpkg
--rwxr-xr-x   1 root root  377 Apr  8  2024 logrotate
--rwxr-xr-x   1 root root 1.4K Mar 29  2024 man-db
--rwxr-xr-x   1 root root  518 Jan  9  2024 sysstat
+[SUID FILES]:
+26
 
-/etc/cron.hourly:
-total 20K
-drwxr-xr-x   2 root root 4.0K May  5 06:37 .
-drwxr-xr-x 115 root root  12K Jun 30 08:54 ..
--rw-r--r--   1 root root  102 Mar 31  2024 .placeholder
-
-/etc/cron.monthly:
-total 20K
-drwxr-xr-x   2 root root 4.0K May  5 06:37 .
-drwxr-xr-x 115 root root  12K Jun 30 08:54 ..
--rw-r--r--   1 root root  102 Mar 31  2024 .placeholder
-
-/etc/cron.weekly:
-total 24K
-drwxr-xr-x   2 root root 4.0K May  5 06:57 .
-drwxr-xr-x 115 root root  12K Jun 30 08:54 ..
--rw-r--r--   1 root root  102 Mar 31  2024 .placeholder
--rwxr-xr-x   1 root root 1.1K Mar 29  2024 man-db
-
-/etc/cron.yearly:
-total 20K
-drwxr-xr-x   2 root root 4.0K May  5 06:37 .
-drwxr-xr-x 115 root root  12K Jun 30 08:54 ..
--rw-r--r--   1 root root  102 Mar 31  2024 .placeholder
-
-[WORD WRITABLE FILES]
-
-[SUID FILES]
-/snap/core18/2999/bin/mount
-/snap/core18/2999/bin/ping
-/snap/core18/2999/bin/su
-/snap/core18/2999/bin/umount
-/snap/core18/2999/usr/bin/chfn
-/snap/core18/2999/usr/bin/chsh
-/snap/core18/2999/usr/bin/gpasswd
-/snap/core18/2999/usr/bin/newgrp
-/snap/core18/2999/usr/bin/passwd
-/snap/core18/2999/usr/bin/sudo
-/snap/core18/2999/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-/snap/core18/2999/usr/lib/openssh/ssh-keysign
-/usr/sbin/mount.nfs
-/usr/lib/polkit-1/polkit-agent-helper-1
-/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-/usr/lib/openssh/ssh-keysign
-/usr/bin/sudo
-/usr/bin/passwd
-/usr/bin/su
-/usr/bin/mount
