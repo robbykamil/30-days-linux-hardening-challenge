@@ -32,10 +32,8 @@ print_baseline()
     echo "LINUX SECURITY BASELINE REPORT"
     echo -e "==================================\n\n"
 
-    # ==================================
-    # SECTION 1: SYSTEM INFORMATION
-    # ==================================
-
+    echo "SYSTEM INFORMATION"
+    echo -e "==================================\n"
     echo -e "[HOSTNAME]:\n$thehostname\n"
     echo -e "[OS VERSION]:\n$osversion\n"
     echo -e "[KERNEL]:\n$kernelversion\n"
@@ -56,5 +54,27 @@ print_baseline()
     echo -e "[SUID FILES]:\n$suidfiles\n"
 }
 
+calculate_score()
+{
+    echo -e "\nSECURITY SCORE"
+    echo -e "==================================\n"
+
+    score=100
+    audit_results=""
+
+    #1. Check the Number of Sudo Users (-10 points if too many)
+    max_allowed_admins=2
+    if [ "$countsudousers" -gt "$max_allowed_admins" ]; then
+        score=$((score-10))
+        audit_results+=$'[-] Too Many Sudi Users Found! Risk of Privilege Abuse\n'
+    else
+        audit_results+=$'[+] Sudo Users Count Within Safe Limit\n'
+    fi
+
+    echo $score
+    echo $audit_results
+}
+
 collect_data
 print_baseline
+calculate_score

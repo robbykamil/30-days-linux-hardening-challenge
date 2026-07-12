@@ -3,6 +3,9 @@ LINUX SECURITY BASELINE REPORT
 ==================================
 
 
+SYSTEM INFORMATION
+==================================
+
 [HOSTNAME]:
 vc-devops
 
@@ -52,3 +55,9 @@ Password Authentication Disabled
 [SUID FILES]:
 26
 
+
+SECURITY SCORE
+==================================
+
+100
+[+] Sudo Users Count Within Safe Limit
